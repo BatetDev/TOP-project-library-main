@@ -14,6 +14,14 @@ class Book {
   }
 }
 
+/* Comic Subclass */
+class Comic extends Book {
+  constructor(title, author, pages, publicationYear, readStatus, illustrator) {
+    super(title, author, pages, publicationYear, readStatus);
+    this.illustrator = illustrator;
+  }
+}
+
 /* Function to add a book to the library */
 function addBookToLibrary(title, author, pages, publicationYear, readStatus) {
   const newBook = new Book(title, author, pages, publicationYear, readStatus);
