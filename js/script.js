@@ -16,12 +16,12 @@ class Book {
   }
 
   // Method to update readStatus
-  updateReadStatus(newStatus) {
+  set readStatus(newStatus) {
     this.#readStatus = newStatus;
   }
 
   // Getter for readStatus
-  getReadStatus() {
+  get ReadStatus() {
     return this.#readStatus;
   }
 }
@@ -94,7 +94,7 @@ function displayBooks() {
     // Add event listener to update read status
     const readStatusSelect = bookCard.querySelector(`#read-status-${index}`);
     readStatusSelect.addEventListener("change", (e) => {
-      book.updateReadStatus(e.target.value);
+      book.readStatus = e.target.value;
     });
 
     // Add event listener to remove book
