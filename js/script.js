@@ -5,12 +5,24 @@ const myLibrary = [];
 
 /* Book Class */
 class Book {
+  #readStatus;
+
   constructor(title, author, pages, publicationYear, readStatus) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.publicationYear = publicationYear;
-    this.readStatus = readStatus;
+    this.#readStatus = readStatus;
+  }
+
+  // Method to update readStatus
+  updateReadStatus(newStatus) {
+    this.#readStatus = newStatus;
+  }
+
+  // Getter for readStatus
+  getReadStatus() {
+    return this.#readStatus;
   }
 }
 
@@ -82,7 +94,7 @@ function displayBooks() {
     // Add event listener to update read status
     const readStatusSelect = bookCard.querySelector(`#read-status-${index}`);
     readStatusSelect.addEventListener("change", (e) => {
-      book.readStatus = e.target.value;
+      book.updateReadStatus(e.target.value);
     });
 
     // Add event listener to remove book
