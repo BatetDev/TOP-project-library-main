@@ -1,7 +1,30 @@
 /* PROJECT LIBRARY */
 
-/* Library array of book objects */
-const myLibrary = [];
+/* Library Class */
+class Library {
+  static totalBooks = 0;
+
+  constructor() {
+    this.books = [];
+  }
+
+  // Method to add a book
+  addBook(book) {
+    this.books.push(book);
+    Library.totalBooks++;
+  }
+
+  // Method to remove a book
+  removeBook(index) {
+    this.books.splice(index, 1);
+    Library.totalBooks--;
+  }
+
+  // Static method to get totalBooks
+  static getTotalBooks() {
+    return Library.totalBooks;
+  }
+}
 
 /* Book Class */
 class Book {
@@ -34,16 +57,18 @@ class Comic extends Book {
   }
 }
 
+const myLibrary = new Library(); // Create an instance of Library
+
 /* Function to add a book to the library */
 function addBookToLibrary(title, author, pages, publicationYear, readStatus) {
   const newBook = new Book(title, author, pages, publicationYear, readStatus);
-  myLibrary.push(newBook);
+  myLibrary.addBook(newBook);
   displayBooks();
 }
 
 /* Function to handle the removal of book from library */
 function removeBookFromLibrary(index) {
-  myLibrary.splice(index, 1);
+  myLibrary.removeBook(index);
   displayBooks();
 }
 
@@ -52,7 +77,7 @@ function displayBooks() {
   const libraryContainer = document.querySelector("#library-container");
   libraryContainer.innerHTML = "";
 
-  myLibrary.forEach((book, index) => {
+  myLibrary.books.forEach((book, index) => {
     // Create a new element for each book
     const bookCard = document.createElement("div");
     bookCard.classList.add("book-card");
