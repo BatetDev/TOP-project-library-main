@@ -1,15 +1,17 @@
-"use strict";
+/* PROJECT LIBRARY */
 
 /* Library array of book objects */
 const myLibrary = [];
 
-/* Book Constructor function */
-function Book(title, author, pages, publicationYear, readStatus) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.publicationYear = publicationYear;
-  this.readStatus = readStatus;
+/* Book Class */
+class Book {
+  constructor(title, author, pages, publicationYear, readStatus) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.publicationYear = publicationYear;
+    this.readStatus = readStatus;
+  }
 }
 
 /* Function to add a book to the library */
@@ -108,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-/* Tests */
+/* TESTS */
 addBookToLibrary("The Dark", "Mark Boer", 321, 2020, "read");
 addBookToLibrary("VSC History", "Radu Vida", 141, 2021, "to-read");
 addBookToLibrary("Old World", "Andrea Rhorn", 243, 2019, "currently-reading");
