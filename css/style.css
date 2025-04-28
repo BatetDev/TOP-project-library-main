@@ -116,3 +116,10 @@ h2 {
   z-index: 1001;
   width: 300px;
 }
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}

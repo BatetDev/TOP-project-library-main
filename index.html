@@ -15,27 +15,27 @@
       <div id="library-container"></div>
       <button id="add-book-btn" class="fixed-btn">Add Book</button>
       <div id="add-book-form" class="modal hidden">
-        <form id="book-form">
+        <form id="book-form" novalidate>
           <label for="title">Title</label>
-          <input type="text" id="title" name="title" required />
+          <input type="text" id="title" name="title" />
+          <span class="error-message" id="title-error"></span>
           <label for="author">Author</label>
-          <input type="text" id="author" name="author" required />
+          <input type="text" id="author" name="author" />
+          <span class="error-message" id="author-error"></span>
           <label for="pages">Pages</label>
-          <input type="number" id="pages" name="pages" required />
+          <input type="number" id="pages" name="pages" />
+          <span class="error-message" id="pages-error"></span>
           <label for="publication-year">Publication Year</label>
-          <input
-            type="number"
-            id="publication-year"
-            name="publication-year"
-            required
-          />
+          <input type="number" id="publication-year" name="publication-year" />
+          <span class="error-message" id="publicationYear-error"></span>
           <label for="read-status">Read Status</label>
-          <select id="read-status" name="read-status" required>
+          <select id="read-status" name="read-status">
             <option value="read">Read</option>
             <option value="to-read">To Read</option>
             <option value="currently-reading">Currently Reading</option>
             <option value="did-not-finish">Did Not Finish</option>
           </select>
+          <span class="error-message" id="readStatus-error"></span>
           <button type="submit">Add</button>
         </form>
       </div>

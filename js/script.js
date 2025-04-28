@@ -84,33 +84,32 @@ function displayBooks() {
 
     // Add book details (title, author, etc.)
     bookCard.innerHTML = `
-        <div class="book-info">
-          <h3>${book.title}</h3>
-          <p>Author: ${book.author}</p>
-          <p>Pages: ${book.pages}</p>
-          <p>Publication Year: ${book.publicationYear}</p>
-          <label for="read-status-${index}">Read Status:</label>
-          <select id="read-status-${index}" class="read-status">
-              <option value="read" ${
-                book.readStatus === "read" ? "selected" : ""
-              }>Read</option>
-              <option value="to-read" ${
-                book.readStatus === "to-read" ? "selected" : ""
-              }>To Read</option>
-              <option value="currently-reading" ${
-                book.readStatus === "currently-reading" ? "selected" : ""
-              }>Currently Reading</option>
-              <option value="did-not-finish" ${
-                book.readStatus === "did-not-finish" ? "selected" : ""
-              }>Did Not Finish</option>
-          </select>
-                  <button class="remove-book-btn" data-index="${index}">Remove Book</button>
-        </div>
+      <div class="book-info">
+        <h3>${book.title}</h3>
+        <p>Author: ${book.author}</p>
+        <p>Pages: ${book.pages}</p>
+        <p>Publication Year: ${book.publicationYear}</p>
+        <label for="read-status-${index}">Read Status:</label>
+        <select id="read-status-${index}" class="read-status">
+          <option value="read" ${
+            book.ReadStatus === "read" ? "selected" : ""
+          }>Read</option>
+          <option value="to-read" ${
+            book.ReadStatus === "to-read" ? "selected" : ""
+          }>To Read</option>
+          <option value="currently-reading" ${
+            book.ReadStatus === "currently-reading" ? "selected" : ""
+          }>Currently Reading</option>
+          <option value="did-not-finish" ${
+            book.ReadStatus === "did-not-finish" ? "selected" : ""
+          }>Did Not Finish</option>
+        </select>
+        <button class="remove-book-btn" data-index="${index}">Remove Book</button>
+      </div>
 
-                <div class="book-cover">
-          <img src="https://greenhousescribes.com/wp-content/uploads/2020/10/book-cover-generic.jpg" alt="Book Cover">
-        </div>
-        
+      <div class="book-cover">
+        <img src="https://greenhousescribes.com/wp-content/uploads/2020/10/book-cover-generic.jpg" alt="Book Cover">
+      </div>
     `;
 
     // Append to the library container
@@ -137,21 +136,130 @@ document.addEventListener("DOMContentLoaded", () => {
   const bookFormContainer = document.querySelector("#add-book-form");
   const bookForm = document.querySelector("#book-form");
 
+  // Toggle visibility of the form
   addBookBtn.addEventListener("click", () => {
     bookFormContainer.classList.toggle("hidden");
   });
 
+  // Helper function to validate individual fields
+  function validateField(field, errorMessage) {
+    const value = field.value.trim(); // Trim whitespace
+    if (!value) {
+      field.setCustomValidity(errorMessage); // Set custom error message
+      return false;
+    }
+    field.setCustomValidity(""); // Clear any previous error
+    return true;
+  }
+
+  // Handle form submission
   bookForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const title = document.querySelector("#title").value;
-    const author = document.querySelector("#author").value;
-    const pages = document.querySelector("#pages").value;
-    const publicationYear = document.querySelector("#publication-year").value;
-    const readStatus = document.querySelector("#read-status").value;
 
-    addBookToLibrary(title, author, pages, publicationYear, readStatus);
-    bookForm.reset();
-    bookFormContainer.classList.add("hidden");
+    // Get references to the input elements
+    const titleInput = document.querySelector("#title");
+    const authorInput = document.querySelector("#author");
+    const pagesInput = document.querySelector("#pages");
+    const publicationYearInput = document.querySelector("#publication-year");
+    const readStatusInput = document.querySelector("#read-status");
+
+    // Reset custom validity messages and clear error messages
+    titleInput.setCustomValidity("");
+    authorInput.setCustomValidity("");
+    pagesInput.setCustomValidity("");
+    publicationYearInput.setCustomValidity("");
+
+    document.querySelector("#title-error").textContent = "";
+    document.querySelector("#author-error").textContent = "";
+    document.querySelector("#pages-error").textContent = "";
+    document.querySelector("#publicationYear-error").textContent = "";
+
+    // Validate each field
+    let isTitleValid = validateField(titleInput, "Title is required.");
+    if (!isTitleValid) {
+      document.querySelector("#title-error").textContent =
+        titleInput.validationMessage;
+    }
+
+    let isAuthorValid = validateField(authorInput, "Author is required.");
+    if (!isAuthorValid) {
+      document.querySelector("#author-error").textContent =
+        authorInput.validationMessage;
+    }
+
+    let isPagesValid = validateField(
+      pagesInput,
+      "Number of pages is required."
+    );
+    if (
+      isPagesValid &&
+      (isNaN(pagesInput.value) || Number(pagesInput.value) <= 0)
+    ) {
+      pagesInput.setCustomValidity(
+        "Number of pages must be a positive number."
+      );
+      isPagesValid = false;
+    }
+    if (!isPagesValid) {
+      document.querySelector("#pages-error").textContent =
+        pagesInput.validationMessage;
+    }
+
+    let isPublicationYearValid = validateField(
+      publicationYearInput,
+      "Publication year is required."
+    );
+    if (isPublicationYearValid) {
+      const yearValue = Number(publicationYearInput.value);
+      if (
+        isNaN(yearValue) ||
+        yearValue < 1000 ||
+        yearValue > new Date().getFullYear()
+      ) {
+        publicationYearInput.setCustomValidity(
+          "Publication year must be a valid year between 1000 and the current year."
+        );
+        isPublicationYearValid = false;
+      }
+    }
+    if (!isPublicationYearValid) {
+      document.querySelector("#publicationYear-error").textContent =
+        publicationYearInput.validationMessage;
+    }
+
+    // Check if all fields are valid
+    if (
+      isTitleValid &&
+      isAuthorValid &&
+      isPagesValid &&
+      isPublicationYearValid
+    ) {
+      // If valid, proceed with form submission
+      const titleValue = titleInput.value.trim();
+      const authorValue = authorInput.value.trim();
+      const pagesValue = Number(pagesInput.value);
+      const publicationYearValue = Number(publicationYearInput.value);
+      const readStatusValue = readStatusInput.value;
+
+      addBookToLibrary(
+        titleValue,
+        authorValue,
+        pagesValue,
+        publicationYearValue,
+        readStatusValue
+      );
+      bookForm.reset();
+      bookFormContainer.classList.add("hidden");
+
+      // Clear error messages after successful submission
+      document.querySelector("#title-error").textContent = "";
+      document.querySelector("#author-error").textContent = "";
+      document.querySelector("#pages-error").textContent = "";
+      document.querySelector("#publicationYear-error").textContent = "";
+    } else {
+      // Show error messages
+      bookForm.reportValidity();
+    }
   });
 });
 
